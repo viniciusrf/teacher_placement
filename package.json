@@ -1,0 +1,23 @@
+{
+  "name": "teacher_placement",
+  "version": "1.0.0",
+  "description": "A simple function to make the teacher's placement",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viniciusrf/teacher_placement.git"
+  },
+  "author": "viniciusrf",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/viniciusrf/teacher_placement/issues"
+  },
+  "homepage": "https://github.com/viniciusrf/teacher_placement#readme",
+  "dependencies": {
+    "clear": "^0.1.0",
+    "readline-sync": "^1.4.10"
+  }
+}
