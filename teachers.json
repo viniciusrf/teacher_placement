@@ -1,1 +1,1 @@
-[]
+[{"teacher":"Marcia","levels":["K1","K2","K3"],"givenTime":{"SEG1":true,"SEG2":true,"TER1":true}},{"teacher":"Bruno","levels":["J1","J2","T1"],"givenTime":{"SEG3":true,"TER1":true,"TER2":true}},{"teacher":"Fulano","levels":["T1","T2","T3","T4"],"givenTime":{"SEG2":true,"SEG3":true,"TER2":true,"TER3":true}}]

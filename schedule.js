@@ -9,10 +9,19 @@ function arrangeTeachers(teachers, classes) {
         const suitableTeacher = findSuitableTeacher(teachers, classItem);
 
         if (suitableTeacher) {
-            let placementTemp
-            placementTemp.set('class', classItem);
-            placementTemp.set('teacher', suitableTeacher.name)
-            placements.push(placementTemp)
+            
+            const teacherIndex = teachers.indexOf(suitableTeacher);
+            if (teacherIndex > -1) teachers[teacherIndex].get('givenTime').set(classItem.get('time'), false);
+            
+            placements.push({
+                class: classItem.get('time') + ' - ' + classItem.get('level'),
+                teacher: suitableTeacher.get('teacher')
+            })
+        } else {
+            placements.push({
+                class: classItem.get('time') + ' - ' + classItem.get('level'),
+                teacher: 'SEM TEACHER DISPONÍVEL'
+            })
         }
     });
 
@@ -22,8 +31,10 @@ function arrangeTeachers(teachers, classes) {
 function findSuitableTeacher(teachers, classItem) {
     for (const teacher of teachers) {
         const teacherLevels = teacher.get('levels')
-        if (teacherLevels.includes(classItem.level) && teacher.givenTime.has(classItem.time)) {
-            suitableTeacher.givenTime.delete(classItem.time);
+        if (teacherLevels.includes(classItem.get('level')) 
+            && teacher.get('givenTime').has(classItem.get('time'))
+            && teacher.get('givenTime').get(classItem.get('time')) === true ) {
+
             return teacher;
         }
     }
@@ -36,7 +47,7 @@ function getInput(prompt) {
 }
 
 function convertClassesToJSON(classes) {
-    if (classes.lenght > 0) {
+    if (classes.length > 0) {
         const classesJSON = JSON.stringify(
             classes.map(map => Array.from(map.entries()))
         );
@@ -51,7 +62,7 @@ function convertJSONtoClasses(classesJson) {
 }
 
 function convertTeachersToJSON(teachers) {
-    if (teachers.lenght > 0) {
+    if (teachers.length > 0) {
         const teachersJSON = JSON.stringify(
             teachers.map(map => {
                 return {
@@ -76,11 +87,6 @@ function convertJSONtoTeachers(teachersJson) {
     });
 }
 
-function saveToJSON(json, option) {
-    if ( option === 'classes') fs.writeFileSync('classes.json', json);
-    if ( option === 'teachers') fs.writeFileSync('teachers.json', json);
-}
-
 function getFromJSON(option) {
     if ( option === 'classes' && fs.existsSync('./classes.json')) {
         const classesJSON = fs.readFileSync('./classes.json')
@@ -91,6 +97,11 @@ function getFromJSON(option) {
         const teachersJSON = fs.readFileSync('./teachers.json')
         return convertJSONtoTeachers(teachersJSON);
     }
+}
+
+function saveToJSON(json, option) {
+    if ( option === 'classes') fs.writeFileSync('classes.json', json);
+    if ( option === 'teachers') fs.writeFileSync('teachers.json', json);
 }
 
 // Example usage:
@@ -108,15 +119,16 @@ while(readlineSync.keyInYNStrict('Deseja cadastrar uma turma? (Y ou N) ')) {
     let tempClass = new Map();
 
     let selectedIndex
+    selectedIndex = readlineSync.keyInSelect(times, 'Qual horário da turma? ')
+    tempClass.set('time', times[selectedIndex])
+
     selectedIndex = readlineSync.keyInSelect(levels, 'Qual o níveil da turma? ') 
     tempClass.set('level', levels[selectedIndex])
 
-    selectedIndex = readlineSync.keyInSelect(times, 'Qual horário da turma? ')
-    tempClass.set('time', times[selectedIndex])
     classes.push(tempClass)
 }
     convertClassesToJSON(classes);
-
+    clear();
 // CADASTRO DE TEACHERS
 while(readlineSync.keyInYNStrict('Deseja cadastrar um professor? (Y ou N) ')) {
     clear();
@@ -144,7 +156,25 @@ while(readlineSync.keyInYNStrict('Deseja cadastrar um professor? (Y ou N) ')) {
     teachers.push(tempTeacher)
 }
     convertTeachersToJSON(teachers);
-const assignedTeachers = arrangeTeachers(teachers, classes);
+    classes.sort((a, b) => {
+        if (b.get('time') > a.get('time')) return -1;
+        if (b.get('time') < a.get('time')) return 1;
+        if (b.get('time') === a.get('time')) return 0;
+    });
 
-console.log('\nAssigned Teachers:', assignedTeachers);
+    const finalPlacements = arrangeTeachers(teachers, classes);
 
+console.log('\nPlacements:', finalPlacements);
+console.log('\nTeachers:', teachers);
+console.log('\nClasses:', classes);
+
+if (readlineSync.keyInYNStrict('Deseja salvar o placement como csv? (Y ou N) ')) {
+    const replacer = (key, value) => value === null ? '' : value 
+    const header = Object.keys(finalPlacements[0])
+    const csv = [
+    header.join(','), // header row first
+    ...finalPlacements.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+    ].join('\r\n')
+
+    fs.writeFileSync('placements.csv', csv);
+}
