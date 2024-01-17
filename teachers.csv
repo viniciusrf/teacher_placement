@@ -1,0 +1,15 @@
+class,teacher
+"ANDREIA",{"SEG1":"false","SEG2":"on class","SEG3":"on class","SEX1":"false","SEX2":"false","SEX3":"false","TER1":"false","TER2":"on class","TER3":"on class"}
+"BIANCA",{"SEG1":"false","SEG2":"on class","SEG3":"on class","SEX1":"false","SEX2":"false","SEX3":"false","TER1":"on class","TER2":"on class","TER3":"on class"}
+"CAMILA",{"SEG1":"on class","SEG2":"on class","SEG3":"on class","SEX1":"on class","SEX2":"on class","SEX3":"true","TER1":"on class","TER2":"on class","TER3":"true"}
+"INGRID",{"SEG1":"false","SEG2":"on class","SEG3":"on class","SEX1":"true","SEX2":"on class","SEX3":"true","TER1":"on class","TER2":"on class","TER3":"on class"}
+"IZADORA",{"SEG1":"false","SEG2":"false","SEG3":"on class","SEX1":"false","SEX2":"on class","SEX3":"true","TER1":"false","TER2":"on class","TER3":"on class"}
+"JAMES",{"SEG1":"on class","SEG2":"on class","SEG3":"true","SEX1":"false","SEX2":"false","SEX3":"false","TER1":"false","TER2":"on class","TER3":"false"}
+"JULIANA S",{"SEG1":"on class","SEG2":"on class","SEG3":"false","SEX1":"false","SEX2":"false","SEX3":"false","TER1":"false","TER2":"on class","TER3":"on class"}
+"PRISCYLA",{"SEG1":"on class","SEG2":"on class","SEG3":"true","SEX1":"false","SEX2":"true","SEX3":"true","TER1":"on class","TER2":"on class","TER3":"false"}
+"RAIZA",{"SEG1":"false","SEG2":"on class","SEG3":"on class","SEX1":"false","SEX2":"false","SEX3":"false","TER1":"false","TER2":"on class","TER3":"on class"}
+"SUZANA",{"SEG1":"on class","SEG2":"true","SEG3":"false","SEX1":"false","SEX2":"true","SEX3":"false","TER1":"on class","TER2":"true","TER3":"false"}
+"THALITA",{"SEG1":"on class","SEG2":"on class","SEG3":"true","SEX1":"true","SEX2":"true","SEX3":"true","TER1":"on class","TER2":"on class","TER3":"true"}
+"LEON",{"SEG1":"true","SEG2":"on class","SEG3":"true","SEX1":"true","SEX2":"true","SEX3":"true","TER1":"on class","TER2":"true","TER3":"true"}
+"BEATRIZ",{"SEG1":"true","SEG2":"true","SEG3":"true","SEX1":"true","SEX2":"true","SEX3":"true","TER1":"true","TER2":"true","TER3":"true"}
+"LAURA",{"SEG1":"false","SEG2":"true","SEG3":"true","SEX1":"false","SEX2":"false","SEX3":"false","TER1":"false","TER2":"true","TER3":"true"}

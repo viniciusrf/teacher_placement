@@ -11,7 +11,7 @@ function arrangeTeachers(teachers, classes) {
         if (suitableTeacher) {
             
             const teacherIndex = teachers.indexOf(suitableTeacher);
-            if (teacherIndex > -1) teachers[teacherIndex].get('givenTime').set(classItem.get('time'), false);
+            if (teacherIndex > -1) teachers[teacherIndex].get('givenTime').set(classItem.get('time'), 'on class');
             
             placements.push({
                 class: classItem.get('time') + ' - ' + classItem.get('level'),
@@ -33,7 +33,7 @@ function findSuitableTeacher(teachers, classItem) {
         const teacherLevels = teacher.get('levels')
         if (teacherLevels.includes(classItem.get('level')) 
             && teacher.get('givenTime').has(classItem.get('time'))
-            && teacher.get('givenTime').get(classItem.get('time')) === true ) {
+            && teacher.get('givenTime').get(classItem.get('time')) === 'true' ) {
 
             return teacher;
         }
@@ -105,8 +105,8 @@ function saveToJSON(json, option) {
 }
 
 // Example usage:
-const levels = ['K1', 'K2', 'K3', 'J1', 'J2', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6'];
-const times = ['SEG1', 'SEG2', 'SEG3', 'TER1', 'TER2', 'TER3'];
+const levels = ['K1', 'K1A', 'K2', 'K2A', 'J0', 'J1', 'J2', 'T1', 'TA', 'T2', 'T3', 'T4', 'T5', 'T6'];
+const times = ['SEG1', 'SEG2', 'SEG3', 'TER1', 'TER2', 'TER3', 'SEX1', 'SEX2', 'SEX3'];
 let teachers = [];
 let classes = [];
 //CHECK PARA VER SE EXISTEM ARQUIVOS
@@ -147,14 +147,24 @@ while(readlineSync.keyInYNStrict('Deseja cadastrar um professor? (Y ou N) ')) {
 
     let teacherSchedule = new Map();
     while ((selectedIndex = readlineSync.keyInSelect(times, 'Quais horários '+ nome +' tem disponível? ')) !== -1) {
-        teacherSchedule.set(times[selectedIndex], true);
+        teacherSchedule.set(times[selectedIndex], 'true');
         clear();
         console.log('Horários selecionados: ', teacherSchedule)
     }
+
     tempTeacher.set('givenTime', teacherSchedule)
     console.log('Professor cadastrado', tempTeacher);
     teachers.push(tempTeacher)
 }
+
+    for (const teacher of teachers) {
+        for (const time of times) {
+            if (!teacher.get('givenTime').has(time)) teacher.get('givenTime').set(time, 'false');
+        }
+        const sortedGivenTimeEntries = [...teacher.get('givenTime').entries()].sort((a, b) => a[0].localeCompare(b[0]));
+        teacher.set('givenTime', new Map(sortedGivenTimeEntries))
+    }
+
     convertTeachersToJSON(teachers);
     classes.sort((a, b) => {
         if (b.get('time') > a.get('time')) return -1;
@@ -177,4 +187,21 @@ if (readlineSync.keyInYNStrict('Deseja salvar o placement como csv? (Y ou N) '))
     ].join('\r\n')
 
     fs.writeFileSync('placements.csv', csv);
+
+    let finalTeachers = [];
+    for (const teacher of teachers) {
+        finalTeachers.push({
+            "teacher": teacher.get('teacher'),
+            "horarios": Object.fromEntries(teacher.get('givenTime'))
+        })
+    }
+
+    const headerTeachers  = Object.keys(finalTeachers[0])
+    const csvTeachers  = [
+    header.join(','), // header row first
+    ...finalTeachers.map(row => headerTeachers.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+    ].join('\r\n')
+
+    fs.writeFileSync('teachers.csv', csvTeachers );
+
 }
